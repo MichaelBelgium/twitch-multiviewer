@@ -101,7 +101,7 @@ function renderStreams() {
 
     if (channels.length === 0) {
         container.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-[calc(100vh-140px)] text-center px-4">
+            <div class="flex flex-col items-center justify-center text-center px-4">
                 <h2 class="text-twitch-purple text-2xl font-bold mb-4">No streams yet!</h2>
                 <p class="text-gray-400 max-w-lg">
                     Enter Twitch usernames above to start watching multiple streams at once. 
@@ -134,4 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadFromURL();
+
+    const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
+    container.classList.add('h-[calc(100vh-' + headerHeight + 'px)]');
 });
