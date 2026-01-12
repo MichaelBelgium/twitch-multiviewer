@@ -181,6 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadFromURL();
 
-    const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
-    document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+    //Because of the tags being added on load, there's a slight delay before the header height is correct
+    //This does causes twitch autoplay to not work on some streams ... eh 
+    setTimeout(() => {
+        const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
+        document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+    }, 100)
 });
