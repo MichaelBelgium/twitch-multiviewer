@@ -1,6 +1,7 @@
 let channels = [];
 let previousClass = null;
 const container = document.getElementById('streamContainer');
+const chatSidebar = document.getElementById('chatSidebar');
 
 function updateURL() {
     const params = new URLSearchParams();
@@ -23,6 +24,7 @@ function loadFromURL() {
         renderTags();
     }
     renderStreams();
+    renderChats();
 }
 
 function addChannel() {
@@ -34,6 +36,7 @@ function addChannel() {
     if (!channels.includes(channel)) {
         channels.push(channel);
         renderStreams();
+        addChat(channel);
         renderTags();
         updateURL();
     }
@@ -44,6 +47,7 @@ function addChannel() {
 function removeChannel(channel) {
     channels = channels.filter(c => c !== channel);
     document.getElementById(channel).remove();
+    document.getElementById('chat-' + channel).remove();
     updateGridClass();
     renderTags();
     updateURL();
@@ -52,8 +56,50 @@ function removeChannel(channel) {
 function clearAll() {
     channels = [];
     renderStreams();
+    renderChats();
     renderTags();
     updateURL();
+}
+
+function toggleChat() {
+    const chatToggle = document.getElementById('chatToggle');
+
+    if (chatSidebar.classList.contains('translate-x-full')) {
+        chatSidebar.classList.remove('translate-x-full');
+        chatToggle.textContent = 'Hide Chat';
+    } else {
+        chatSidebar.classList.add('translate-x-full');
+        chatToggle.textContent = 'Show Chat';
+    }
+}
+
+function addChat(channel) {
+    chatSidebar.innerHTML += `
+        <section id="chat-${channel}" class="border-b-2 border-twitch-border">
+            <div class="bg-twitch-dark p-2 font-semibold text-sm text-twitch-purple">
+                ${channel}'s chat
+            </div>
+            <iframe
+                src="https://www.twitch.tv/embed/${channel}/chat?parent=${window.location.hostname}&darkpopout"
+                scrolling="no"
+                height="500"
+                width="100%"
+                class="border-0"
+            >
+            </iframe>
+        </section>`;
+}
+
+function renderChats() {
+    if (channels.length === 0) {
+        return;
+    }
+
+    chatSidebar.innerHTML = '';
+
+    channels.forEach(channel => {
+        addChat(channel);
+    });
 }
 
 function renderTags() {
@@ -117,11 +163,11 @@ function renderStreams() {
             <iframe
                 id="${channel}"
                 src="https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}"
-                frameborder="0"
                 allowfullscreen
                 scrolling="no"
                 height="100%"
                 width="100%"
+                class="border-0"
             >
             </iframe>
         `).join('')}
@@ -136,5 +182,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFromURL();
 
     const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
-    container.classList.add('h-[calc(100vh-' + headerHeight + 'px)]');
+    document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
 });
