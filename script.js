@@ -74,13 +74,15 @@ function toggleChat() {
 }
 
 function addChat(channel) {
+    const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
     chatSidebar.innerHTML += `
         <section id="chat-${channel}" class="border-b-2 border-gray-200 dark:border-twitch-border">
             <div class="bg-gray-100 dark:bg-twitch-dark p-2 font-semibold text-sm text-twitch-purple">
                 ${channel}'s chat
             </div>
             <iframe
-                src="https://www.twitch.tv/embed/${channel}/chat?parent=${window.location.hostname}&darkpopout"
+                src="https://www.twitch.tv/embed/${channel}/chat?parent=${window.location.hostname}${darkMode ? '&darkpopout' : ''}"
                 scrolling="no"
                 height="500"
                 width="100%"
