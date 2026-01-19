@@ -75,8 +75,8 @@ function toggleChat() {
 
 function addChat(channel) {
     chatSidebar.innerHTML += `
-        <section id="chat-${channel}" class="border-b-2 border-twitch-border">
-            <div class="bg-twitch-dark p-2 font-semibold text-sm text-twitch-purple">
+        <section id="chat-${channel}" class="border-b-2 border-gray-200 dark:border-twitch-border">
+            <div class="bg-gray-100 dark:bg-twitch-dark p-2 font-semibold text-sm text-twitch-purple">
                 ${channel}'s chat
             </div>
             <iframe
@@ -105,7 +105,7 @@ function renderChats() {
 function renderTags() {
     const container = document.getElementById('tagContainer');
     container.innerHTML = channels.map(channel => `
-        <div class="bg-twitch-border px-3 py-1.5 rounded-full text-sm flex items-center gap-2">
+        <div class="bg-purple-100 dark:bg-twitch-border px-3 py-1.5 rounded-full text-sm flex items-center gap-2">
             <span>${channel}</span>
             <button 
                 onclick="removeChannel('${channel}')"
@@ -186,5 +186,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
         document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
-    }, 100)
+    }, 150)
 });
