@@ -21,8 +21,8 @@ function loadFromURL() {
     const channelsParam = params.get('channels');
     if (channelsParam) {
         channels = channelsParam.split(',').filter(c => c.trim());
-        renderTags();
     }
+    renderTags();
     renderStreams();
     renderChats();
 }
@@ -109,6 +109,13 @@ function renderTags() {
             >×</button>
         </div>
     `).join('');
+
+    //Because of the tags being added, there's a slight delay before the header height is correct
+    //This does causes twitch autoplay to not work on some streams ... eh
+    setTimeout(() => {
+        const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
+        document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+    }, 150)
 }
 
 function getGridClass(count) {
@@ -176,11 +183,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadFromURL();
-
-    //Because of the tags being added on load, there's a slight delay before the header height is correct
-    //This does causes twitch autoplay to not work on some streams ... eh 
-    setTimeout(() => {
-        const headerHeight = document.getElementsByTagName('header')[0].offsetHeight;
-        document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
-    }, 150)
 });
