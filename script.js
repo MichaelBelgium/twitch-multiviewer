@@ -93,15 +93,9 @@ function addChat(channel) {
 }
 
 function renderChats() {
-    if (channels.length === 0) {
-        return;
-    }
-
     chatSidebar.innerHTML = '';
 
-    channels.forEach(channel => {
-        addChat(channel);
-    });
+    channels.forEach(channel => addChat(channel));
 }
 
 function renderTags() {
