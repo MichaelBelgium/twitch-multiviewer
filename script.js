@@ -64,6 +64,26 @@ function renderSavedListsUI() {
         lists.map(l => `<option value="${l.id}">${l.name ?? l.channels.join(', ')}</option>`).join('');
 }
 
+function actionSelectedList(action) {
+    const select = document.getElementById('savedListsSelect');
+    const id = select.value;
+
+    if (id.length === 0) return;
+
+    if (action === 'load') {
+        const list = getSavedLists().find(l => l.id == id);
+        if (!list) return;
+
+        channels = list.channels;
+        renderStreams();
+        renderChats();
+        renderTags();
+        updateURL();
+    } else if (action === 'delete') {
+        persistLists(getSavedLists().filter(l => l.id != id));
+        renderSavedListsUI();
+    }
+}
 ///endregion
 
 function updateURL() {
@@ -217,7 +237,7 @@ function renderStreams() {
             <div class="flex flex-col items-center justify-center text-center px-4">
                 <h2 class="text-twitch-purple text-2xl font-bold mb-4">No streams yet!</h2>
                 <p class="text-gray-400 max-w-lg">
-                    Enter Twitch usernames above to start watching multiple streams at once. 
+                    Enter Twitch usernames above to start watching multiple streams at once.
                     Perfect for watching tournaments, co-streams, or just keeping up with your favorite streamers!
                 </p>
             </div>
