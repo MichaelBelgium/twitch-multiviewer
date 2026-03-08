@@ -137,11 +137,7 @@ function onTagDrop(e) {
 
     const srcStream = document.getElementById(srcChannel);
     const targetStream = document.getElementById(targetChannel);
-    if (oldIndex < newIndex) {
-        targetStream.after(srcStream);
-    } else {
-        targetStream.before(srcStream);
-    }
+    targetStream.before(srcStream);
 
     renderTags();
     updateURL();
