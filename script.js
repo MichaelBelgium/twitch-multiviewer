@@ -2,6 +2,26 @@ let channels = [];
 let previousClass = null;
 const container = document.getElementById('streamContainer');
 const chatSidebar = document.getElementById('chatSidebar');
+const saveModal = document.getElementById('saveListModal');
+
+///region Saving lists
+
+function openSaveModal() {
+    const nameInput = document.getElementById('listNameInput');
+    nameInput.value = '';
+    saveModal.classList.remove('hidden');
+    nameInput.focus();
+}
+
+function closeSaveModal() {
+    saveModal.classList.add('hidden');
+}
+
+function updateSaveButton() {
+    const btn = document.getElementById('saveListBtn');
+    btn.classList.toggle('hidden', channels.length === 0);
+}
+///endregion
 
 function updateURL() {
     const params = new URLSearchParams();
@@ -103,7 +123,7 @@ function renderTags() {
     container.innerHTML = channels.map(channel => `
         <div class="bg-purple-100 dark:bg-twitch-border px-3 py-1.5 rounded-full text-sm flex items-center gap-2">
             <span>${channel}</span>
-            <button 
+            <button
                 onclick="removeChannel('${channel}')"
                 class="hover:text-red-400 transition w-4 h-4 flex items-center justify-center text-lg leading-none"
             >×</button>
@@ -147,6 +167,7 @@ function updateGridClass() {
 
 function renderStreams() {
     updateGridClass();
+    updateSaveButton();
 
     if (channels.length === 0) {
         container.innerHTML = `

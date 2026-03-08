@@ -33,37 +33,71 @@
     <header class="bg-white dark:bg-twitch-gray border-b-2 border-twitch-purple p-4">
         <h1 class="text-twitch-purple text-2xl font-bold mb-4">Twitch multi-viewer</h1>
         
-        <div class="flex flex-wrap gap-2 items-center">
-            <input 
-                type="text" 
-                id="channel"
-                autocomplete="off"
-                placeholder="Enter Twitch username..."
-                class="bg-white dark:bg-twitch-dark border-2 border-gray-300 dark:border-twitch-border text-gray-900 dark:text-gray-100 px-4 py-2 rounded-sm focus:outline-hidden focus:border-twitch-purple flex-1 min-w-[200px] max-w-xs"
-            />
-            <button 
-                onclick="addChannel()"
-                class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
-            >
-                Add Stream
-            </button>
-            <button 
-                onclick="clearAll()"
-                class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
-            >
-                Clear All
-            </button>
-            <button
-                onclick="toggleChat()"
-                id="chatToggle"
-                class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
-            >
-                Show Chat
-            </button>
+        <div class="flex flex-col xl:flex-row gap-2 xl:items-center xl:justify-between">
+            <section>
+                <input
+                    type="text"
+                    id="channel"
+                    autocomplete="off"
+                    placeholder="Enter Twitch username..."
+                    class="bg-white dark:bg-twitch-dark border-2 border-gray-300 dark:border-twitch-border text-gray-900 dark:text-gray-100 px-4 py-2 rounded-sm focus:outline-hidden focus:border-twitch-purple flex-1 min-w-[200px] max-w-xs"
+                />
+                <button
+                    onclick="addChannel()"
+                    class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
+                >
+                    Add Stream
+                </button>
+                <button
+                    onclick="clearAll()"
+                    class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
+                >
+                    Clear All
+                </button>
+                <button
+                    onclick="toggleChat()"
+                    id="chatToggle"
+                    class="bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
+                >
+                    Show Chat
+                </button>
+            </section>
+            <section>
+                <div class="mb-2">
+                    <button
+                        id="saveListBtn"
+                        onclick="openSaveModal()"
+                        class="hidden bg-twitch-purple hover:bg-purple-700 text-white px-6 py-2 rounded-sm font-semibold transition active:scale-95"
+                    >Save List</button>
+                </div>
+            </section>
         </div>
-        
+
         <div class="flex flex-wrap gap-2 mt-3" id="tagContainer"></div>
     </header>
+
+    <div id="saveListModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden">
+        <div class="bg-white dark:bg-twitch-gray border-2 border-twitch-purple rounded-sm shadow-xl p-6 w-full max-w-sm mx-4 flex flex-col gap-4">
+            <h2 class="text-lg font-bold text-twitch-purple">Save current list</h2>
+            <input
+                type="text"
+                id="listNameInput"
+                autocomplete="off"
+                placeholder="Name (optional)"
+                class="bg-white dark:bg-twitch-dark border-2 border-gray-300 dark:border-twitch-border text-gray-900 dark:text-gray-100 px-4 py-2 rounded-sm focus:outline-hidden focus:border-twitch-purple"
+                onkeydown="if(event.key==='Enter') saveList()"
+            />
+            <div class="flex gap-2 justify-end">
+                <button
+                    onclick="closeSaveModal()"
+                    class="bg-gray-200 hover:bg-gray-300 dark:bg-twitch-border dark:hover:bg-gray-500 text-gray-800 dark:text-gray-100 px-5 py-2 rounded-sm font-semibold transition active:scale-95"
+                >Cancel</button>
+                <button
+                    class="bg-twitch-purple hover:bg-purple-700 text-white px-5 py-2 rounded-sm font-semibold transition active:scale-95"
+                >Save</button>
+            </div>
+        </div>
+    </div>
 
     <div id="streamContainer" class="grid grid-cols-1 gap-1"></div>
 
