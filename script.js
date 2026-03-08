@@ -41,7 +41,29 @@ function saveList() {
     lists.push({ id: Date.now(), name, channels });
     persistLists(lists);
     closeSaveModal();
+    renderSavedListsUI();
 }
+
+function renderSavedListsUI() {
+    const container = document.getElementById('loadListContainer');
+    const select = document.getElementById('savedListsSelect');
+    const lists = getSavedLists();
+
+    if (lists.length === 0)
+    {
+        container.classList.add('hidden');
+        container.classList.remove('inline-block');
+    }
+    else
+    {
+        container.classList.remove('hidden');
+        container.classList.add('inline-block');
+    }
+
+    select.innerHTML = `<option value="">Load a saved list</option>` +
+        lists.map(l => `<option value="${l.id}">${l.name ?? l.channels.join(', ')}</option>`).join('');
+}
+
 ///endregion
 
 function updateURL() {
@@ -225,4 +247,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     loadFromURL();
+    renderSavedListsUI();
 });
