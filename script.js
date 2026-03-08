@@ -134,6 +134,7 @@ function removeChannel(channel) {
     updateGridClass();
     renderTags();
     updateURL();
+    updateSaveButton();
 }
 
 function clearAll() {
