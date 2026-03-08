@@ -5,6 +5,15 @@ const chatSidebar = document.getElementById('chatSidebar');
 const saveModal = document.getElementById('saveListModal');
 
 ///region Saving lists
+function getSavedLists(){
+    const lists = localStorage.getItem('multitwitch_lists');
+
+    return lists ? JSON.parse(lists) : [];
+}
+
+function persistLists(lists) {
+    localStorage.setItem('multitwitch_lists', JSON.stringify(lists));
+}
 
 function openSaveModal() {
     const nameInput = document.getElementById('listNameInput');
@@ -20,6 +29,18 @@ function closeSaveModal() {
 function updateSaveButton() {
     const btn = document.getElementById('saveListBtn');
     btn.classList.toggle('hidden', channels.length === 0);
+}
+
+function saveList() {
+    if (channels.length === 0) return;
+
+    const nameInput = document.getElementById('listNameInput');
+    const lists = getSavedLists();
+    const name = nameInput.value.trim() || null;
+
+    lists.push({ id: Date.now(), name, channels });
+    persistLists(lists);
+    closeSaveModal();
 }
 ///endregion
 
