@@ -98,13 +98,71 @@ function renderChats() {
     channels.forEach(channel => addChat(channel));
 }
 
+///region Tags drag 'n drop
+function onTagDragStart(e) {
+    e.dataTransfer.setData('text/plain', e.currentTarget.dataset.channel);
+    e.dataTransfer.effectAllowed = 'move';
+    e.currentTarget.classList.add('opacity-40');
+}
+
+function onTagDragEnd(e) {
+    e.currentTarget.classList.remove('opacity-40');
+    document.querySelectorAll('#tagContainer [draggable]').forEach(el => {
+        el.classList.remove('ring-2', 'ring-twitch-purple');
+    });
+}
+
+function onTagDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    document.querySelectorAll('#tagContainer [draggable]').forEach(el => {
+        el.classList.remove('ring-2', 'ring-twitch-purple');
+    });
+    e.currentTarget.classList.add('ring-2', 'ring-twitch-purple');
+}
+
+function onTagDrop(e) {
+    e.preventDefault();
+    const srcChannel = e.dataTransfer.getData('text/plain');
+    const targetChannel = e.currentTarget.dataset.channel;
+
+    if (srcChannel === targetChannel) return;
+
+    const oldIndex = channels.indexOf(srcChannel);
+    const newIndex = channels.indexOf(targetChannel);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    channels.splice(oldIndex, 1);
+    channels.splice(oldIndex < newIndex ? newIndex - 1 : newIndex, 0, srcChannel);
+
+    const srcStream = document.getElementById(srcChannel);
+    const targetStream = document.getElementById(targetChannel);
+    if (oldIndex < newIndex) {
+        targetStream.after(srcStream);
+    } else {
+        targetStream.before(srcStream);
+    }
+
+    renderTags();
+    updateURL();
+}
+///endregion
+
 function renderTags() {
     const container = document.getElementById('tagContainer');
     container.innerHTML = channels.map(channel => `
-        <div class="bg-purple-100 dark:bg-twitch-border px-3 py-1.5 rounded-full text-sm flex items-center gap-2">
+        <div
+            data-channel="${channel}"
+            draggable="true"
+            ondragstart="onTagDragStart(event)"
+            ondragend="onTagDragEnd(event)"
+            ondragover="onTagDragOver(event)"
+            ondrop="onTagDrop(event)"
+            class="bg-purple-100 dark:bg-twitch-border px-3 py-1.5 rounded-full text-sm flex items-center gap-2 cursor-grab"
+        >
             <span>${channel}</span>
             <button 
-                onclick="removeChannel('${channel}')"
+                onclick="removeChannel(this.closest('[data-channel]').dataset.channel)"
                 class="hover:text-red-400 transition w-4 h-4 flex items-center justify-center text-lg leading-none"
             >×</button>
         </div>
